@@ -10,10 +10,11 @@ router.post('/register', (req, res) => {
     const user = req.body
     const hash = bcrypt.hashSync(user.password, 14)
     user.password = hash
-    return users.add(user)
+    users.add(user)
         .then(created => {
             res.status(201).json(created)
         }).catch(error => {
+            console.log(error)
             res.status(500).json({ message: 'failed to add user' })
         })
 })
@@ -43,10 +44,10 @@ function generateToken(user){
         username: user.username,
     }
     
-    const option = {
+    const options = {
         expiresIn: '8h'
     }
-    return jwt.sign(payload, secret.jwtSecret, option)
+    return jwt.sign(payload, secret.jwtSecret, options)
 }
 
 
